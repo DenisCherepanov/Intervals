@@ -1,4 +1,5 @@
 const int ledPin = 13;
+const unsigned long interval = 1000;
 
 void setup() {
   pinMode(ledPin, OUTPUT);
@@ -6,7 +7,7 @@ void setup() {
 
 void loop() {
   digitalWrite(ledPin, HIGH);
-  delay(1000);
+  delay(interval);
   digitalWrite(ledPin, LOW);
-  delay(1000);
+  delay(interval);
 }
