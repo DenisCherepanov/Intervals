@@ -1,6 +1,8 @@
 const int ledPin = 13;
 const unsigned long interval = 1000;
 
+#define DEBUG
+
 class Interval
 {
     bool _state;
@@ -15,6 +17,7 @@ class Interval
       pinMode(pin, OUTPUT);
     }
     void poll(unsigned long);
+    void print();
 };
 
 void Interval::poll(unsigned long current) {
@@ -22,12 +25,24 @@ void Interval::poll(unsigned long current) {
     _previous = current;
     _state = !_state;
     digitalWrite(_pin, _state);
+#ifdef DEBUG
+    print();
+#endif
   }
+}
+
+void Interval::print() {
+  Serial.print("Interval with ");
+  Serial.print(_pin);
+  Serial.print(" pin: ");
+  Serial.println(_state ? "HIGH" : "LOW");
 }
 
 Interval ledInterval(ledPin, interval);
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("Intervals example started.");
 }
 
 void loop() {
