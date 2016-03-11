@@ -1,18 +1,36 @@
 const int ledPin = 13;
 const unsigned long interval = 1000;
 
-bool ledState = false;
-unsigned long previous;
+class Interval
+{
+    bool _state;
+    unsigned long _previous;
+    uint8_t _pin;
+    unsigned long _interval;
+
+  public:
+    Interval(uint8_t pin, long interval = 1000):
+      _state(false), _previous(0), _pin(pin), _interval(interval)
+    {
+      pinMode(pin, OUTPUT);
+    }
+    void poll(unsigned long);
+};
+
+void Interval::poll(unsigned long current) {
+  if (current - _previous >= _interval) {
+    _previous = current;
+    _state = !_state;
+    digitalWrite(_pin, _state);
+  }
+}
+
+Interval ledInterval(ledPin, interval);
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
   unsigned long current = millis();
-  if (current - previous >= interval) {
-    previous = current;
-    ledState = !ledState;
-    digitalWrite(ledPin, ledState);
-  }
+  ledInterval.poll(current);
 }
