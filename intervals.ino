@@ -1,9 +1,9 @@
 // constants won't change. Used here to set a pin number :
-int Pin1 = 13;
-int Pin2 = 12;
-int Pin3 = 11;
-int Pin4 = 10;
-int Pin5 = 9;
+const int Pin = 13;
+const int Pin2 = 12;
+const int Pin3 = 11;
+const int Pin4 = 10;
+const int Pin5 = 9;
 
 // Variables will change :
 int State1 = LOW;
@@ -12,18 +12,18 @@ int State3 = LOW;
 int State4 = LOW;
 int State5 = LOW;
 // ledState used to set the LED
-
+//Serial.print(" 1=желтый 2=синий ");
 
 // Generally, you should use "unsigned long" for variables that hold time
 // The value will quickly become too large for an int to store
-unsigned long previousMillis1 = 0;
+unsigned long previousMillis = 0;
 unsigned long previousMillis2 = 0;
 unsigned long previousMillis3 = 0;
 unsigned long previousMillis4 = 0;
 unsigned long previousMillis5 = 0;// will store last time LED was updated
 
 // constants won't change :
-unsigned long interval1 = 1000000; // interval at which to blink (microseconds)
+unsigned long interval = 1000000; // interval at which to blink (microseconds)
 unsigned long interval2 = 500000;
 unsigned long interval3 = 333;// interval at which to blink (milliseconds)
 unsigned long interval4 = 250;
@@ -37,13 +37,12 @@ unsigned long newinterval;
 void setup() {
   // set the digital pin as output:
   Serial.begin(9600);
-  pinMode(Pin1, OUTPUT);
+  pinMode(Pin, OUTPUT);
   pinMode(Pin2, OUTPUT);
   pinMode(Pin3, OUTPUT);
   pinMode(Pin4, OUTPUT);
   pinMode(Pin5, OUTPUT);
 }
-
 
 
 void SerialEvent()
@@ -61,21 +60,17 @@ void SerialEvent()
   }
   if (i > 0) {
     pin = atoi(strtok(buffer, "="));
-    newinterval = atoi(strtok(NULL, "="));
+    newinterval = atol(strtok(NULL, "="));
     Serial.print("\n");
     Serial.print(pin);
      Serial.print(" = ");
     Serial.print(newinterval);
   }
 
-
-
- 
-
   if (pin == 1) {
     //digitalWrite(13, 1);
     // block = true;
-    interval1 = newinterval;
+    interval = newinterval;
     loop();
   }
   if (pin == 2) {
@@ -106,11 +101,11 @@ void SerialEvent()
 void loop() {
 
   unsigned long currentMillis = millis();
-  unsigned long currentMillis2 = micros();
+  unsigned long currentmicro = micros();
   
-  if (currentMillis - previousMillis1 >= interval1) {
+  if (currentmicro - previousMillis >= interval) {
     // save the last time you blinked the LED
-    previousMillis1 = currentMillis2;
+    previousMillis = currentmicro;
 
     if (State1 == LOW) {
       State1 = HIGH;
@@ -118,9 +113,9 @@ void loop() {
       State1 = LOW;
     }
   }
-  if (currentMillis - previousMillis2 >= interval2) {
+  if (currentmicro - previousMillis2 >= interval2) {
     // save the last time you blinked the LED
-    previousMillis2 = currentMillis2;
+    previousMillis2 = currentmicro;
     // if(!block){
     if (State2 == LOW)
     {
@@ -146,10 +141,10 @@ void loop() {
     // save the last time you blinked the LED
     previousMillis4 = currentMillis;
 
-    if (State1 == LOW) {
-      State1 = HIGH;
+    if (State4 == LOW) {
+      State4 = HIGH;
     } else {
-      State1 = LOW;
+      State4 = LOW;
     }
   }
   if (currentMillis - previousMillis5 >= interval5) {
@@ -165,12 +160,11 @@ void loop() {
     }
     //}
   }
-  digitalWrite(Pin1, State1);
+  digitalWrite(Pin, State1);
   digitalWrite(Pin2, State2);
   digitalWrite(Pin3, State3);
   digitalWrite(Pin4, State4);
-  digitalWrite(Pin5, State5);
-  digitalWrite(Pin4, State3);
+  digitalWrite(Pin5, State5); 
   if (Serial.available() > 0) { //ÐµÑÐ»Ð¸ ÐµÑÑ‚ÑŒ Ð¿Ñ€Ð¸Ð½ÑÑ‚Ñ‹Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»,
     SerialEvent();
   }
